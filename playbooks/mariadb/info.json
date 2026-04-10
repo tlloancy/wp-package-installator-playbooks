@@ -1,1 +1,11 @@
-
+{
+  "id": "mariadb",
+  "name": "MariaDB Server",
+  "category": "Database",
+  "description": "Base de données SQL relationnelle.",
+  "playbook": "playbooks/mariadb/main.yml",
+  "options": [
+    { "key": "db_root_password", "label": "Mot de passe Root", "type": "password", "default": "secret" },
+    { "key": "db_port", "label": "Port", "type": "number", "default": 3306 }
+  ]
+}
