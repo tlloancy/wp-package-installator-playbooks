@@ -1,0 +1,26 @@
+name: Update Manifest
+on:
+  push:
+    paths:
+      - 'playbooks/**/info.json' # Se déclenche si un info.json change
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Generate Manifest
+        run: |
+          # On cherche tous les info.json et on les assemble dans un array
+          echo "{\"version\": \"1.0.0\", \"packages\": [" > manifest.json
+          find playbooks -name "info.json" -exec cat {} + | sed 's/}{/},{/g' >> manifest.json
+          echo "]}" >> manifest.json
+          
+      - name: Commit manifest
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add manifest.json
+          git commit -m "Auto-update manifest.json" || exit 0
+          git push
